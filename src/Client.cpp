@@ -174,7 +174,7 @@ void client_statistics(int serverNo, Message *pMsgRequest)
 		}
 //*/
 		sumRtt += rtt;
-		pLat[counter] = rtt/2;
+		pLat[counter] = rtt;
 
 		prevRxTime = rxTime;
 		counter++;
@@ -189,7 +189,7 @@ void client_statistics(int serverNo, Message *pMsgRequest)
 	}
 	else {
 		TicksDuration avgRtt = counter ? sumRtt / counter : TicksDuration::TICKS0 ;
-		TicksDuration avgLatency = avgRtt / 2;
+		TicksDuration avgLatency = avgRtt;
 
 		TicksDuration stdDev = TicksDuration::stdDev(pLat, counter);
 		log_msg_file2(f, "\e[2;35m====> avg-lat=%7.3lf (std-dev=%.3lf)\e[0m", avgLatency.toDecimalUsec(), stdDev.toDecimalUsec());
