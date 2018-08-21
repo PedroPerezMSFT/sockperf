@@ -95,7 +95,7 @@ void dumpFullLog(int serverNo, RecordLog *pFullLog, size_t size, TicksDuration *
     for (size_t i = 0; i < size; i++) {
         double tx = (double)pFullLog[i][0].debugToNsec() / 1000 / 1000 / 1000;
         double rx = (double)pFullLog[i][1].debugToNsec() / 1000 / 1000 / 1000;
-        double latency = (rx - tx) * (USEC_PER_SEC / 2);
+        double latency = (rx - tx) * (USEC_PER_SEC);
         fprintf(f, "%zu, %.9lf, %.9lf, %.3lf\n", i, tx, rx, latency);
     }
     fprintf(f, "------------------------------\n");
@@ -217,7 +217,7 @@ void client_statistics(int serverNo, Message *pMsgRequest) {
         rtt = rxTime - txTime;
 
         sumRtt += rtt;
-        pLat[counter] = rtt / 2;
+        pLat[counter] = rtt;
 
         prevRxTime = rxTime;
         counter++;
@@ -234,7 +234,7 @@ void client_statistics(int serverNo, Message *pMsgRequest) {
                       (uint64_t)counter);
 
         TicksDuration avgRtt = counter ? sumRtt / (int)counter : TicksDuration::TICKS0;
-        TicksDuration avgLatency = avgRtt / 2;
+        TicksDuration avgLatency = avgRtt;
 
         TicksDuration stdDev = TicksDuration::stdDev(pLat, counter);
         log_msg_file2(f, MAGNETA "====> avg-lat=%7.3lf (std-dev=%.3lf)" ENDCOLOR,
